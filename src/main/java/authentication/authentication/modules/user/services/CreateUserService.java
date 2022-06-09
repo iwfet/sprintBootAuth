@@ -1,6 +1,7 @@
 package authentication.authentication.modules.user.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import authentication.authentication.modules.user.UserRepository;
@@ -12,7 +13,12 @@ public class CreateUserService {
   @Autowired
   UserRepository userRepository;
 
+  private BCryptPasswordEncoder passwordEncoder(){
+    return new BCryptPasswordEncoder();
+  }
+
   public User execute(User user) {
+    System.out.println("aaaaaa");
 
     User existsUser = userRepository.findByUsername(user.getUsername());
 
@@ -20,9 +26,9 @@ public class CreateUserService {
       throw new Error("User already exists!");
     }
 
-    User createdUser = userRepository.save(user);
+    user.setPassword(passwordEncoder().encode(user.getPassword()));
 
-    return createdUser;
+    return userRepository.save(user);
   }
 
 }

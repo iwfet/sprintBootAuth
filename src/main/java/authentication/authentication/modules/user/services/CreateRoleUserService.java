@@ -22,17 +22,17 @@ public class CreateRoleUserService {
   public User execute(CreateUserRoleDTO createUserRoleDTO) {
 
     Optional<User> userExists = userRepository.findById(createUserRoleDTO.getIdUser());
-    List<Role> roles = new ArrayList<>();
+
 
     if (userExists.isEmpty()) {
+      System.out.println("teste");
       throw new Error("User does not exists!");
     }
-
-    roles = createUserRoleDTO.getIdsRoles().stream().map(role -> {
-      return new Role(role);
-    }).collect(Collectors.toList());
+    System.out.println("aaaaa");
+    final List<Role> roles = createUserRoleDTO.getIdsRoles().stream().map(Role::new).collect(Collectors.toList());
 
     User user = userExists.get();
+    System.out.println(user);
 
     user.setRoles(roles);
 
